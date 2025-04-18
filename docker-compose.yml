@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.5
+    container_name: etcd
+    environment:
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+      - ETCD_SNAPSHOT_COUNT=50000
+      - ETCD_LOG_LEVEL=info
+    ports:
+      - "2379:2379"
+    command:
+      - /usr/local/bin/etcd
+      - --name
+      - etcd
+      - --data-dir
+      - /etcd
+      - --listen-client-urls
+      - http://0.0.0.0:2379
+      - --advertise-client-urls
+      - http://etcd:2379
+    networks:
+      - milvus
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    command: server /minio_data --console-address ":9001"
+    environment:
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/minio_data
+    networks:
+      - milvus
+
+  milvus-standalone:
+    image: milvusdb/milvus:v2.3.3
+    container_name: milvus-standalone
+    command: ["milvus", "run", "standalone"]
+    depends_on:
+      - etcd
+      - minio
+    ports:
+      - "19530:19530"
+      - "9091:9091"
+    environment:
+      ETCD_ENDPOINTS: etcd:2379
+      MINIO_ADDRESS: minio:9000
+      AWS_ACCESS_KEY_ID: minioadmin
+      AWS_SECRET_ACCESS_KEY: minioadmin
+      USE_LOCAL_DISK: "false"
+    volumes:
+      - milvus_data:/var/lib/milvus
+    networks:
+      - milvus
+
+  attu:
+    image: zilliz/attu:latest
+    container_name: attu
+    ports:
+      - "3000:3000"
+    depends_on:
+      - milvus-standalone
+    environment:
+      - MILVUS_URL=tcp://milvus-standalone:19530
+    networks:
+      - milvus
+
+volumes:
+  minio_data:
+  milvus_data:
+
+networks:
+  milvus:

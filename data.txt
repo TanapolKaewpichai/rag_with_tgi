@@ -1,0 +1,38 @@
+LangChain is a framework for building applications with LLMs. It allows you to combine retrieval with generation using tools like OpenAI and FAISS.
+
+Retrieval-Augmented Generation (RAG) enhances LLMs by letting them access external information. You can use vector stores like FAISS to enable this.
+
+FAISS stands for Facebook AI Similarity Search. It is used to search through large sets of embeddings efficiently.
+
+Embeddings convert text into high-dimensional vectors. These vectors capture the meaning and context of the text.
+
+You can visualize these embeddings using t-SNE or PCA to better understand how your chunks are related.
+
+Data Assimilation through Kalman Filters We will use the Ensemble Kalman filter (EnKF) to assimilate pressure data into the vortex model.
+
+The EnKF was originally introduced to handle the high-dimensional nonlinear dynamics found in meteorology [17].
+
+Before describing how we can use it to augment a vortex model, we first give an overview of the standard Kalman filter.
+
+A key open problem in vortex modeling is determining how much vorticity to release from the leading edge.
+
+While it is generally accepted that the Kutta condition is a valid vortex shedding criterion to use at the trailing edge, its use at the leading edge in numerous vortex models [5, 26, 59, 7] is mainly due to the lack of better criteria.
+
+This has driven the exploration of data-assisted leading edge shedding criteria.
+
+In a discrete vortex model developed by Katz [28], leading edge shedding was tuned with a handful of parameters.
+
+Some parameters, such as the position of the leading edge separation point, were chosen based on experimental data, while others were adjusted to bring the predicted force closer to the measured force.
+
+In more recent work, Ramesh and Gopalarathnam [47] introduced a shedding criterion based on the observation that real airfoils can support a critical level of suction around the leading edge before flow separation is triggered.
+
+Correspondingly, the authors suggested the use of the leading edge suction parameter (LESP), a measure of the leading edge suction peak, to govern vortex shedding.
+
+In their model, when the LESP is below a critical value, which we will denote as LESPc, no vorticity is released.
+
+However, when the instantaneous LESP exceeds LESPc, vortex particles will be released with the appropriate amount of strength to bring the LESP down to LESPc.
+
+By tuning their discrete vortex model with an empirically determined LESPc, the authors were able to predict lift responses that were in good agreement with experimental results.
+
+However, since the model was statically tuned, it had some difficulty handling real-time perturbations to the flow, such as gusts or freestream disturbances
+
