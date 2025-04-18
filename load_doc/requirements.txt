@@ -1,0 +1,12 @@
+langchain_community==0.3.21
+langchain_core==0.3.51
+langchain_text_splitters==0.3.8
+langchain-huggingface==0.1.2
+langchain-milvus==0.1.9
+
+# Unstructured document parsing (with local inference)
+unstructured[local-inference,pdf]==0.4.16
+
+# PDF support for fallback loader
+pdfminer.six==20221105
+pdfplumber==0.10.4

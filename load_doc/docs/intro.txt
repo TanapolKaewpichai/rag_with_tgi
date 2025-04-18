@@ -1,0 +1,3 @@
+Welcome to our RAG system test.
+This document is just a placeholder with simple text content.
+It will be used to test the ingestion pipeline.
